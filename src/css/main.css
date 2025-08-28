@@ -27,6 +27,18 @@ form{
     text-align: center;
 }
 
+button{
+    width: 25%;
+    height: 100%;
+    font-size: 20px;
+    /* text-align: center; */
+}
+
+#nextButton{
+    display: flex;
+    justify-content: center;
+}
+
 header{
     font-size: 48px;
     text-align: center;
