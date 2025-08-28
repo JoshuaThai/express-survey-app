@@ -1,0 +1,17 @@
+/* Contains the general css styling for the survey page. */
+body{
+    background-color: whitesmoke;
+    display: grid;
+    justify-content: center;
+}
+
+header{
+    font-size: 48px;
+}
+
+section{
+    background-color: white;
+    border: 1px solid black;
+    display: grid;
+    justify-content: center;
+}
