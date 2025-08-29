@@ -92,8 +92,7 @@
                     <input type="radio" name="gender" value="Other"><label>Other</label>
                     <br><br><br>
                     <!-- Add other demographics information -->
-                     <!-- Household income (ranges, not exact numbers),
-                      Education level, Employment status or occupation, Marital status, Household size -->
+                     <!-- Marital status-->
                     <label for="hispanic">Do you identify as Hispanic or Latino?</label>
                     <br><br>
                     <input type="radio" name="hispanic" value="Yes" required><label>Hispanic or Latino</label>
@@ -120,16 +119,16 @@
 
                     <label for="phone">Enter your phone number to receive invitations to other surveys: (OPTIONAL)</label><br><br>
                     <input type="tel" id="phone" name="phone" placeholder="Ex.&rpar; 414-123-4567" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"><br><br>
-                    <div id = "nextButton">
-                        <button onclick="nextPage('/src/index.html')">Previous Page</button>
-                        <button onclick="nextPage('/src/info2.html')">Next Page</button>
-                    </div>
                 </div>
             </form>
             <p style="color:red;" hidden id="message">Thank you for your interest! This survey has already reached the maximum number of responses needed
                 from gamers outside of the United States. Please stay tuned for the near future where more surveys will be available
                 for gamers outside of the United States.
             </p>
+            <div id = "nextButton">
+                <button onclick="nextPage('/src/index.html')">&lt;&lt;</button>
+                <button onclick="nextPage('/src/info2.html')">&gt;&gt;</button>
+            </div>
         </section>
         <script src="/src/js/info.js"></script>
         <script src="/src/js/main.js"></script>
