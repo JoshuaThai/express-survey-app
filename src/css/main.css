@@ -25,13 +25,27 @@ hr{
     color: black;
     width: 75%;
 }
+/* RELATED TO FORM AND INPUTS */
 form{
     text-align: center;
     height: auto;
 }
 
+.date{
+    width: 50%;
+    height: 50%;
+    text-align: center;
+    font-size: 16px;
+}
+
+input{
+    font-size: 16px;
+}
+
+/* ABOVE RELATED TO FORM AND INPUTS */
+
 button{
-    width: 25%;
+    width: 100%;
     height: 100%;
     font-size: 20px;
     /* text-align: center; */
@@ -59,9 +73,4 @@ section{
     padding: 1vh 1vw 1vh 1vw;
 }
 
-.date{
-    width: 50%;
-    height: 50%;
-    text-align: center;
-    font-size: 16px;
-}
+
