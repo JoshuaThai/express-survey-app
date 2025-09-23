@@ -14,15 +14,19 @@ app.get('/', (req, res) =>{
     res.render("index");
 })
 
-app.post('/', (req, res) =>{
+app.post('/', (req, res) =>{ //look at request coming from your web server
     // req will contain infromation being sent in
     // res will contain information being sent out by server
-    let selected = req.body.submitButton;
+    let selected = req.body.nextPage;
+    // let selected = req.body.submitButton;
+    // console.log(otherSelection);
     if (selected == "Exit"){
         res.redirect("/unsuccessful.html"); // redirect user to unsuccessful page.
     } else{
-        res.render("info");
+        res.render(selected);
     }
 })
+
+
 
 app.listen(3000);

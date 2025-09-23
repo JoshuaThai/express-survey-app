@@ -11,3 +11,11 @@ function exit(){
 function nextPage(link){
     window.location.href = link;
 }
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   // capture phase so we catch any form on the page
+//   document.addEventListener('submit', (e) => {
+//     console.log('a form was submitted:', e.target.id || '(no id)');
+//     e.preventDefault(); // keep page here while testing
+//   }, true);
+// });

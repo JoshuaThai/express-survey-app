@@ -40,26 +40,36 @@
             </ul>
             <p>By submitting your responses, you consent to the above.</p>
             <hr>
-            <form>
+            <form method = "POST">
                 <label for="consent">Do you consent to providing your responses to us?</label><br><br>
-                <input type="radio" name="consent" value="Yes" onclick="showNext()"> <label>Yes, I consent.</label>
+                <input type="radio" name="consent" value="Yes" onclick="showNext()"> 
+                <label>Yes, I consent.</label>
                 <br><br>
-                <input type="radio" name="consent" value="No" onclick="exit()"> <label>No, I do not consent.</label>
+                <input type="radio" name="consent" value="No" onclick="exit()"> 
+                <label>No, I do not consent.</label>
                 <br>
             </form>
             <br>
             <!-- Make button appear after user click on one of the radio buttons at the top. -->
             <div id = "nextButton" style="display: none;">
-                <form method="POST">
+                <form method="POST" action="/" id="myForm">
+                    <input type="hidden" name="nextPage" value="info">
                     <input type="submit" name="submitButton" value=">>">
                 </form>
             </div>
             <div id = "exitButton" style="display: none;">
-                <form method="POST">
+                <form method="POST" action="/">
+                    <input type="hidden" name="nextPage" value="Exit">
                     <input type="submit" name="submitButton" value="Exit">
                 </form>
             </div>
         </section>
         <script src="/js/main.js"></script>
+        <!-- <script>
+            document.addEventListener('submit', (e) => {
+                console.log('a form was submitted:', e.target.id || '(no id)');
+                e.preventDefault(); // keep the page here so you can see the log
+            }, true); // <-- capture phase
+        </script> -->
     </body>
 </html>

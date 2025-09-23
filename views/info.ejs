@@ -11,7 +11,7 @@
             <p>We'll begin the survey by asking you to put some personal information below:</p>
             <br>
             <hr>
-            <form>
+            <form id="myForm">
                 <h1>Geographic/Location Information:</h1>
                 <label for="live-in-us">Do you live in the United States?</label><br><br>
                 <input type="radio" name="consent" value="Yes" onclick="showHidden()"> <label>Yes, I do.</label>
@@ -126,8 +126,17 @@
                 for gamers outside of the United States.
             </p>
             <div id = "nextButton">
-                <button onclick="nextPage('/src/index.html')">&lt;&lt;</button>
-                <button onclick="nextPage('/src/info2.html')">&gt;&gt;</button>
+                <form method="POST">
+                    <input type="hidden" name="nextPage" value="index">
+                    <input type="submit" name="submitButton" value="&lt;&lt;">
+                </form>
+                <form method="POST">
+                    <input type="hidden" name="nextPage" value="info2">
+                    <input type="submit" name="submitButton" value="&gt;&gt;">
+                </form>
+                
+                <!-- <button onclick="nextPage('/src/index.html')">&lt;&lt;</button>
+                <button onclick="nextPage('/src/info2.html')">&gt;&gt;</button> -->
             </div>
         </section>
         <script src="/js/info.js"></script>
