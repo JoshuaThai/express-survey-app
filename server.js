@@ -18,8 +18,13 @@ app.post('/', (req, res) =>{ //look at request coming from your web server
     // req will contain infromation being sent in
     // res will contain information being sent out by server
     let selected = req.body.nextPage;
-    // let selected = req.body.submitButton;
+    let indexSelected = req.body.submitButton; // if user failed survey right away
+    if (indexSelected == "Exit"){
+        res.redirect("/unsuccessful.html"); // redirect user to unsuccessful page.
+        return
+    }
     // console.log(otherSelection);
+    console.log(selected);
     if (selected == "Exit"){
         res.redirect("/unsuccessful.html"); // redirect user to unsuccessful page.
     } else{

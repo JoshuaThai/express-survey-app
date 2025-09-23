@@ -47,8 +47,15 @@ input, select{
 
 #exitButton{
     scale: 1.4;
+    justify-content: center;
     /* width: 100%;
     height: 100%; */
+}
+
+#indexSubmit{
+    width: 25%;
+    height: 25%;
+    margin-bottom: 2%;
 }
 
 /* ABOVE RELATED TO FORM AND INPUTS */
