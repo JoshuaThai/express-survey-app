@@ -19,7 +19,7 @@
                 <label>No, I do not.</label>
                 <br><br>
                 <div id="hidden-answers" hidden>
-                    <label for="birth-date">Current State you reside in:</label><br><br>
+                    <label for="states">Current State you reside in:</label><br><br>
                     <select name="states">
                         <option value="AL">Alabama</option>
                         <option value="AK">Alaska</option>
@@ -81,7 +81,7 @@
                     <hr>
                     <h1>Basic Demographics:</h1>
                     <label for="birth-date">Enter your Date of Birth:<span style="color: red;">*</span></label><br>
-                    <input type="date" class="date" name="birth-date" required><br><br>
+                    <input type="date" class="date"  id="date" name="birth-date" required><br><br>
 
                     <label for="gender">What is your gender?<span style="color: red;">*</span></label><br><br>
                     <input type="radio" name="gender" value="Male" required><label>Male</label>
@@ -144,5 +144,11 @@
         </section>
         <script src="/js/info.js"></script>
         <script src="/js/main.js"></script>
+        <script>
+            // Safely embed server data into client JS:
+            const formData = <%- JSON.stringify(myData || {}) %>;
+            // Now use the same variable you just defined:
+            loadData(formData);
+        </script>
     </body>
 </html>
