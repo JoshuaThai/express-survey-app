@@ -52,7 +52,7 @@ input, select{
     height: 100%; */
 }
 
-#indexSubmit{
+.indexSubmit{
     width: 25%;
     height: 25%;
     margin-bottom: 2%;

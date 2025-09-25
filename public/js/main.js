@@ -5,6 +5,7 @@ function showNext(){
 
 function exit(){
     document.getElementById("nextButton").style.display = "flex";
+    document.getElementById("back").hidden = true;
     document.getElementById("nextPage").value = "Exit";
 }
 
