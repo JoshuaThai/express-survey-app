@@ -1,7 +1,8 @@
 function showHidden(){
     console.log("Hidden being fired!");
+    document.getElementById("nextButton").style.display = "flex";
+    document.getElementById("nextPage").value = "info2";
     document.getElementById("hidden-answers").hidden = false;
-    showNext();
 }
 
 
