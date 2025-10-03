@@ -1,12 +1,16 @@
 function showNext(){
     document.getElementById("nextButton").style.display = "flex";
-    document.getElementById("nextPage").value = "info";
+    // document.getElementById("proceedButton").value = "info";
 }
 
 function exit(){
     document.getElementById("nextButton").style.display = "flex";
-    document.getElementById("back").hidden = true;
-    document.getElementById("nextPage").value = "Exit";
+    let backButton = document.getElementById("back")
+    if (backButton){
+        backButton.hidden = true;
+    }
+    document.getElementById("proceedButton").formAction = "/survey/unsuccessful";
+    // console.log(document.getElementById("nextPage").value);
 }
 
 function loadData(myData){
@@ -30,9 +34,9 @@ function nextPage(link){
     window.location.href = link;
 }
 
-module.exports = {
-        loadData
-};
+// module.exports = {
+//         loadData
+// };
 // form.addEventListener('submit', function(e) {
 //   e.preventDefault(); // This disables native validation unless you manually check
 //   // You must validate inputs manually here

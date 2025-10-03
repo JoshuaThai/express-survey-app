@@ -135,20 +135,16 @@
                 <!-- </div> -->
                 </div>
                 <div id = "nextButton" style="display: none;">
-                    <button onclick="history.back()" class="indexSubmit" id="back" hidden>
-                        Back</button>
+                    <button type="submit" name="backPage" class="indexSubmit" id="backButton" 
+                    formaction="/survey/2" hidden>Back</button>
+
                     <input type="hidden" name="nextPage"  id="nextPage" value="info2">
-                    <button type="submit" class="indexSubmit" name="submitButton">Next</button>
+                    <button type="submit" class="indexSubmit" name="submitButton"
+                    formaction="/survey/3">Next</button>
                 </div>
             </form>
         </section>
         <script src="/js/info.js"></script>
         <script src="/js/main.js"></script>
-        <script>
-            // Safely embed server data into client JS:
-            const formData = <%- JSON.stringify(myData || {}) %>;
-            // Now use the same variable you just defined:
-            loadData(formData);
-        </script>
     </body>
 </html>
