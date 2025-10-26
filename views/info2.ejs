@@ -12,7 +12,7 @@
             <hr>
             <h1>Household Information:</h1>
             <form method="POST" action="/">
-                <label for="income"> What is your household income? </label><br><br>
+                <label for="income"> What is your household income?<span style="color: red;">*</span> </label><br><br>
                 <input type="radio" name="income" value="24999" required><label> Less than $25,000</label><br><br>
                 <input type="radio" name="income" value="25000"><label> $25,000 – $34,999</label><br><br>
                 <input type="radio" name="income" value="35000"><label> $35,000 – $49,999</label><br><br>
@@ -22,7 +22,7 @@
                 <input type="radio" name="income" value="150000"><label> $150,000 – $199,999</label><br><br>
                 <input type="radio" name="income" value="200000"><label> $200,000 or more</label><br><br>
                 <input type="radio" name="income" value="n/a"><label> Prefer not to answer</label><br><br>
-                <label for="size"> What is your household size? </label><br><br>
+                <label for="size"> What is your household size?<span style="color: red;">*</span> </label><br><br>
                 <input type="radio" name="household" value="1" required><label> 1</label><br><br>
                 <input type="radio" name="household" value="2"><label> 2</label><br><br>
                 <input type="radio" name="household" value="3"><label> 3</label><br><br>
@@ -30,19 +30,22 @@
                 <input type="radio" name="household" value="5+"><label> 5+</label><br><br>
                 <hr>
                 <h1>Other demographics information:</h1>
-                <label for="education">What is your highest level of Education that you completed?</label><br><br>
+                <label for="education">What is your highest level of Education that you completed?
+                    <span style="color: red;">*</span></label><br><br>
                 <input type="radio" name="education" value="High School" required><label> High School or GED</label><br><br>
                 <input type="radio" name="education" value="Some College"><label> Some College</label><br><br>
                 <input type="radio" name="education" value="Associate's Degree"><label> Associate's Degree</label><br><br>
                 <input type="radio" name="education" value="Bachelor's Degree"><label> Bachelor's Degree</label><br><br>
                 <input type="radio" name="education" value="Master's Degree"><label> Master's Degree</label><br><br>
                 <input type="radio" name="education" value="Doctorate"><label> Doctorate or PhD</label><br><br>
-                <label for="employment-status">What is your employment status?</label><br><br>
+                <label for="employment-status">What is your employment status?
+                    <span style="color: red;">*</span></label><br><br>
                 <input type="radio" name="employment-status" value="Full-Time" required><label> Full-Time</label><br><br>
                 <input type="radio" name="employment-status" value="Full-Time"><label> Part-Time</label><br><br>
                 <input type="radio" name="employment-status" value="Self Employed"><label> Self Employed</label><br><br>
                 <input type="radio" name="employment-status" value="Student"><label> Student</label><br><br>
-                <label for="marital-status">What is your marital status?</label><br><br>
+                <label for="marital-status">What is your marital status?
+                    <span style="color: red;">*</span></label><br><br>
                 <input type="radio" name="marital-status" value="Married" required><label> Married</label><br><br>
                 <input type="radio" name="marital-status" value="Seperated"><label> Seperated</label><br><br>
                 <input type="radio" name="marital-status" value="Divorced"><label> Divorced</label><br><br>
@@ -54,10 +57,10 @@
                 <button type="submit" formaction="/survey/2" class="indexSubmit" id="back">
                     Back</button>
                 <input type="hidden" name="nextPage"  id="nextPage" value="info3">
-                <button type="submit" class="indexSubmit" name="submitButton">Next</button>
+                <button type="submit" formaction="/survey/4" class="indexSubmit" name="submitButton">Next</button>
             </div>
             </form>
         </section>
-        <script src="/src/js/main.js"></script>
+        <script src="/js/main.js"></script>
     </body>
 </html>

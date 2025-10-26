@@ -34,10 +34,15 @@ function nextPage(link){
     window.location.href = link;
 }
 
-// module.exports = {
-//         loadData
-// };
-// form.addEventListener('submit', function(e) {
-//   e.preventDefault(); // This disables native validation unless you manually check
-//   // You must validate inputs manually here
-// });
+function showRobloxBox(trueOrFalse){
+    let robloxBox = document.getElementById("robloxYes");
+    let noRobloxBox = document.getElementById("robloxNo");
+    if (robloxBox){
+        robloxBox.hidden = trueOrFalse;
+    }
+    if(trueOrFalse){// Show box that ask why survey player does not play Roblox
+        noRobloxBox.hidden = false;
+    }else{
+        noRobloxBox.hidden = true;
+    }
+}

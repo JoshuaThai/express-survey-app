@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Josh's 2025 Gaming Survey</title>
+    </head>
+    <link rel="stylesheet" href="/css/main.css">
+    <body>
+        <header>Josh's 2025 Gaming Survey</header>
+        <br>
+        <section>
+            <p>Now, we will ask you questions regarding your video game usage!</p>
+            <hr>
+            <h1>Video Games:</h1>
+            <form method="post" action="/">
+                <label for="roblox"> Do you play Roblox?<span style="color: red;">*</span></label><br><br>
+                <input type="radio" onclick="showRobloxBox(false)" name="roblox" value="Yes" required>
+                <label> Yes</label>
+                <br><br>
+                <input type="radio" onclick="showRobloxBox(true)" name="roblox" value="No">
+                <label> No</label><br><br>
+                <div id="robloxYes" hidden>
+                    <label for="robloxWhy">You stated that you played Roblox. 
+                        Do you like it? Why or why not?</label>
+                    <br><br>
+                    <textarea id="robloxWhy" rows="5" cols="100" style="resize: none;"></textarea><br><br>
+                </div>
+                <div id="robloxNo" hidden>
+                    <label for="robloxNo">You stated that you <b>DO NOT</b> played Roblox. Why?</label>
+                    <br><br>
+                    <textarea id="noRoblox" rows="5" cols="100" style="resize: none;"></textarea><br><br>
+                </div>
+
+                <div id = "nextButton" style="display: flex;">
+                
+                <!-- <input type="hidden" name="prevPage" id="prevPage" value="info"> -->
+                <button type="submit" formaction="/survey/3" class="indexSubmit" id="back">
+                        Back</button>
+                <input type="hidden" name="nextPage"  id="nextPage" value="info3">
+                <button type="submit" formaction="/survey/5" class="indexSubmit" name="submitButton">Next</button>
+            </div>
+            </form>
+        </section>
+        <script src="/js/main.js"></script>
+    </body> 
+</html>
