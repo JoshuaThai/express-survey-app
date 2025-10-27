@@ -10,12 +10,46 @@
         <section>
             <p>Some final questions regarding your video game usage!</p>
             <hr>
+            <h1>Video Games - Final Questions:</h1>
             <!-- We will ask some few remaining question regarding the user's video game usage -->
-             <!-- Ask how many hours per week that they play video games -->
-              <!-- At what age did you start gaming? -->
                <!-- Do you develop games? (Whether that be on Scratch, 
                 Roblox or using game engines like Godot, Unity, and ETC.) -->
-                
+            <form method="post">
+                <label for="hours">How many hours per week you play video games?
+                    <span style="color: red;">*</span></label><br><br>
+                <input type="radio" name="hoursPlayed" value="0 - 5" required>
+                <label> 0 - 5</label><br><br>
+                <input type="radio" name="hoursPlayed" value="6 - 10">
+                <label>6 - 10</label><br><br>
+                <input type="radio" name="hoursPlayed" value="11 - 15">
+                <label>11 - 15</label><br><br>
+                <input type="radio" name="hoursPlayed" value="16 - 20">
+                <label>16 - 20</label><br><br>
+                <input type="radio" name="hoursPlayed" value="21+">
+                <label>21+</label><br><br>
+                <label for="ageBegan">At what age did you start gaming?
+                    <span style="color: red;">*</span></label><br><br>
+                <input type="radio" name="ageBegan" value="under 12" required>
+                <label> Under 12</label><br><br>
+                <input type="radio" name="ageBegan" value="12 - 15">
+                <label>12 - 15</label><br><br>
+                <input type="radio" name="ageBegan" value="15 - 18">
+                <label>15 - 18</label><br><br>
+                <input type="radio" name="ageBegan" value="21+">
+                <label>21+</label><br><br>
+                <label for="gameDev">Do you develop games? <br>(E.g.) Scratch, 
+                Roblox, or game engines like Godot, Unity, and ETC.)</label><br><br>
+                <input type="radio" name="gameDev" value="Yes" required>
+                <label> Yes</label><br><br>
+                <input type="radio" name="gameDev" value=No">
+                <label> No</label><br><br>
+            <div id = "nextButton" style="display: flex;"></div>
+                <button type="submit" formaction="/survey/4" class="indexSubmit" id="back">
+                        Back</button>
+                <input type="hidden" name="nextPage"  id="nextPage" value="info3">
+                <button type="submit" formaction="/survey/6" class="indexSubmit" name="submitButton">Finish</button>
+            </div>
+            </form>
         </section>
         <script src="/js/main.js"></script>
     </body>
