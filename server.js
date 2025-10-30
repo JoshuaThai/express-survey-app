@@ -33,7 +33,7 @@ app.use(session({
     resave: false, // don’t save session if unmodified
     saveUninitialized: true, // save new sessions that haven’t been modified yet
     cookie: { 
-        maxAge: 1000 * 60 * 10, // session expires after 10 minutes of inactivity (In milliseconds)
+        maxAge: 1000 * 10, // session expires after 10 seconds of inactivity (In milliseconds)
         secure: false 
     } // set to true if using HTTPS
 }));
@@ -46,6 +46,7 @@ app.set('view engine', 'ejs');
 // app.set("views", "./views");
 
 const fs = require("fs");
+const { error } = require('console');
 // const path = require("path");
 
 const viewsDir = path.join(__dirname, "views");
@@ -70,13 +71,13 @@ console.log(ejsFiles);
 // });
 
 app.get('/survey', (req, res) =>{
-    console.log("Yes");
-    // load data into form.
-    // mainModule.loadData(myData);
-    // res.render("index");
+    if (req.session.email == null || req.session.password == null) {
+        return res.redirect('/survey/login');
+    }
     res.render("index");
 });
 
+// CONTINUE BY SETTING UP DATABASE TO STORE USER LOGIN/SIGNUP DETAILS
 // ALL LOGIN ROUTE HANDLERS BELOW
 app.get('/survey/login', (req, res) =>{
     res.render("login", {error: null});
@@ -87,6 +88,20 @@ app.get('/login', (req, res) =>{
 });
 
 app.post('/login', (req, res) =>{
+    // Loop through the whole database.
+    db.get('SELECT * FROM users', 
+        // [req.body.email, req.body.password], 
+        (err, row) => {
+            if (err) {
+                console.error('❌ Error querying the database:', err.message);
+                return res.render("signup", {error: "An error occurred. Please try again."});
+            }
+            if (row) {
+                console.log("User email: " + row.email);
+                console.log("User password: " + row.password);
+            }
+    });
+
     if (req.body.email == req.session.email && req.body.password == req.session.password) {
         return res.redirect("/survey/1");
     }
@@ -107,6 +122,28 @@ app.post('/signup', (req, res) =>{
     // For simplicity, accept any signup details
     req.session.email = req.body.email;
     req.session.password = req.body.password;
+
+    db.get('SELECT * FROM users WHERE email = ? AND password = ?', 
+        [req.body.email, req.body.password], 
+        (err, row) => {
+            if (err) {
+                console.error('❌ Error querying the database:', err.message);
+                return res.render("signup", {error: "An error occurred. Please try again."});
+            }
+            if (row) {
+                return res.render("signup", {error: "User already exists. Please log in."});
+            }
+        });
+    // Insert new user into the database
+    db.run('INSERT INTO users (email, password) VALUES (?, ?)', 
+        [req.body.email, req.body.password], 
+        function(err) {
+            if (err) {
+                console.error('❌ Error inserting into the database:', err.message);
+                return res.render("signup", {error: "An error occurred. Please try again."});
+            }
+            console.log(`✅ New user created with ID ${this.lastID}`);
+        });
     // In a real app, you'd validate and store these details
     return res.redirect("/survey/1");
 });
@@ -150,9 +187,9 @@ app.get('/survey/:page', (req, res) =>{
     }
     // Redirect to signup page if on page 8
     if (Number(pageNumber) == 8) {
-        return res.redirect('/survey/signup');
+        return res.redirect('/survey/signup', {error: null});
     }
-   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null});
+   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null, error: null});
     // res.render('info', {myData});
 });
 
