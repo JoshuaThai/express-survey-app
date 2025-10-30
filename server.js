@@ -99,12 +99,17 @@ app.post('/login', (req, res) =>{
             if (row) {
                 console.log("User email: " + row.email);
                 console.log("User password: " + row.password);
+                if (req.body.email == row.email && req.body.password == row.password) {
+                    req.session.email = req.body.email;
+                    req.session.password = req.body.password;
+                    return res.redirect("/survey/1");
+                }
             }
     });
 
-    if (req.body.email == req.session.email && req.body.password == req.session.password) {
-        return res.redirect("/survey/1");
-    }
+    // if (req.body.email == req.session.email && req.body.password == req.session.password) {
+    //     return res.redirect("/survey/1");
+    // }
     res.render("login", {error: "Invalid email or password"});
 });
 // ALL LOGIN ROUTE HANDLERS ABOVE
