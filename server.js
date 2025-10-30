@@ -1,8 +1,42 @@
 // Set up server.js
 const express = require('express');
+const session = require('express-session');
+const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 const app = express();
 
 const myData = {}; // where data for form will be stored.
+
+// Set up SQLite database connection
+const dbPath = path.resolve(__dirname, 'data', 'survey.db');
+const db = new sqlite3.Database(dbPath, (err) => {
+  if (err) {
+    console.error('❌ Error connecting to SQLite database:', err.message);
+  } else {
+    console.log('✅ Connected to the SQLite database.');
+  }
+});
+
+// Create user tables (run once)
+db.run(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE,
+    password TEXT
+  )
+`);
+
+
+// Set up session middleware
+app.use(session({
+    secret: 'keyboard cat', // required: used to sign session ID cookies
+    resave: false, // don’t save session if unmodified
+    saveUninitialized: true, // save new sessions that haven’t been modified yet
+    cookie: { 
+        maxAge: 1000 * 60 * 10, // session expires after 10 minutes of inactivity (In milliseconds)
+        secure: false 
+    } // set to true if using HTTPS
+}));
 
 app.use(express.static("public"));
 app.use(express.urlencoded({extended : true}));
@@ -12,7 +46,7 @@ app.set('view engine', 'ejs');
 // app.set("views", "./views");
 
 const fs = require("fs");
-const path = require("path");
+// const path = require("path");
 
 const viewsDir = path.join(__dirname, "views");
 
@@ -25,6 +59,15 @@ function getEjsFiles() {
 const ejsFiles = getEjsFiles();
 console.log(ejsFiles);
 
+// dummy username and password
+// const email = "admin@outlook.com";
+// const password = "password";
+
+// Sample route handlers
+// app.post('/survey', (req, res) =>{ //look at request coming from your web server
+//     // req will contain infromation being sent in
+//     // res will contain information being sent out by server
+// });
 
 app.get('/survey', (req, res) =>{
     console.log("Yes");
@@ -34,34 +77,82 @@ app.get('/survey', (req, res) =>{
     res.render("index");
 });
 
-// app.post('/survey', (req, res) =>{ //look at request coming from your web server
-//     // req will contain infromation being sent in
-//     // res will contain information being sent out by server
-//     let selected = req.body.nextPage;
-//     print("Selected Page: " + selected);
-//     res.render(selected);
-// });
+// ALL LOGIN ROUTE HANDLERS BELOW
+app.get('/survey/login', (req, res) =>{
+    res.render("login", {error: null});
+});
+// redirect /login to login page
+app.get('/login', (req, res) =>{
+    res.render("login", {error: null});
+});
+
+app.post('/login', (req, res) =>{
+    if (req.body.email == req.session.email && req.body.password == req.session.password) {
+        return res.redirect("/survey/1");
+    }
+    res.render("login", {error: "Invalid email or password"});
+});
+// ALL LOGIN ROUTE HANDLERS ABOVE
+
+// ALL SIGNUP ROUTE HANDLERS BELOW
+app.get('/survey/signup', (req, res) =>{
+    res.render("signup", {error: null});
+});
+// redirect /signup to signup page
+app.get('/signup', (req, res) =>{
+    res.render("signup", {error: null});
+});
+
+app.post('/signup', (req, res) =>{
+    // For simplicity, accept any signup details
+    req.session.email = req.body.email;
+    req.session.password = req.body.password;
+    // In a real app, you'd validate and store these details
+    return res.redirect("/survey/1");
+});
+// ALL SIGNUP ROUTE HANDLERS ABOVE
+
+
+// SURVEY PAGE ROUTE HANDLERS BELOW
 
 // '/survey/' and '/survey' and '/survey/1' now point to same page.
 app.get('/survey/:page', (req, res) =>{
-    console.log("INFO PAGE LOADING");
-    // let selected = req.body.nextPage;
+    // console.log("INFO PAGE LOADING");
     const pageNumber = req.params.page;
     const pageList = getEjsFiles();
-    // console.log(selected);
+    // check if user is logged in
+    if (req.session.email == null || req.session.password == null) {
+        if(!isNaN(pageNumber) && Number(pageNumber) == 6){
+            return res.render("info5", {page: pageNumber, 
+                message: 
+                "Thank you for showing interest in our survey! Take a look at the overall results below."});
+        }
+        return res.redirect('/survey/login');
+    }
+    // let selected = req.body.nextPage;
+
+    // console.log("Page Number: " + pageNumber);
     // Ensure pageNumber is a number and redirect if not
     if(isNaN(pageNumber)){
-        res.redirect('/survey/1');
+        return res.render('/survey/1');
     }
 
     // Redirect to first or last page if out of bounds
-    if (pageNumber < 1) {
-         res.redirect('/survey/1');
+    if (Number(pageNumber) < 1) {
+         return res.redirect('/survey/1');
     }
-    if (pageNumber > pageList.length) {
-         res.redirect('/survey/6');
+    if (Number(pageNumber) > pageList.length) {
+         return res.redirect('/survey/6');
     }
-   res.render(pageList[pageNumber - 1], {page: pageNumber});
+    // Redirect to login page if on page 7
+    if (Number(pageNumber) == 7) {
+        return res.redirect('/survey/login');
+    }
+    // Redirect to signup page if on page 8
+    if (Number(pageNumber) == 8) {
+        return res.redirect('/survey/signup');
+    }
+   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null});
     // res.render('info', {myData});
 });
 
@@ -75,8 +166,8 @@ app.post('/survey/:page', (req, res) =>{
         res.redirect('/unsuccessful.html');
         return;
    }
-   res.render(pageList[pageNumber - 1], {page: pageNumber});
-})
+   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null});
+});
 
 
 

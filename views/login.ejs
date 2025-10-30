@@ -9,6 +9,9 @@
         <br>
         <section>
             <h1><u>LOGIN:</u></h1>
+            <% if (error) { %>
+                <p style="color: red;"><%= error %></p>
+            <% } %>
             <p>Enter your email and password to enter the survey.</p>
             <form method="post">
                 <label for="email">Email:
@@ -20,7 +23,7 @@
                 <button type="submit" formaction="/login" id="login_signup" name="submitButton">Login</button>
                 <br>
                 <br>
-                <a href="/survey/8">No account? Sign up here!</a>
+                <a href="/survey/signup">No account? Sign up here!</a>
             </form>
         </section>
     </body> 
