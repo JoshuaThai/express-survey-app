@@ -26,6 +26,16 @@ db.run(`
   )
 `);
 
+db.run(`
+CREATE TABLE IF NOT EXISTS responses (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_email TEXT,
+    question TEXT,
+    answer TEXT,
+    page_number INTEGER
+);
+`)
+
 
 // Set up session middleware
 app.use(session({
@@ -89,28 +99,34 @@ app.get('/login', (req, res) =>{
 
 app.post('/login', (req, res) =>{
     // Loop through the whole database.
-    db.get('SELECT * FROM users', 
-        // [req.body.email, req.body.password], 
+    db.get('SELECT * FROM users WHERE email = ? AND password = ?', 
+        [req.body.email, req.body.password], 
         (err, row) => {
             if (err) {
                 console.error('❌ Error querying the database:', err.message);
                 return res.render("signup", {error: "An error occurred. Please try again."});
             }
             if (row) {
+                console.log("-------------------------");
                 console.log("User email: " + row.email);
                 console.log("User password: " + row.password);
-                if (req.body.email == row.email && req.body.password == row.password) {
-                    req.session.email = req.body.email;
-                    req.session.password = req.body.password;
-                    return res.redirect("/survey/1");
-                }
+                // if (req.body.email == row.email && req.body.password == row.password) {
+                //     req.session.email = req.body.email;
+                //     req.session.password = req.body.password;
+                //     return res.redirect("/survey/1");
+                // }
+                req.session.email = req.body.email;
+                req.session.password = req.body.password;
+                return res.redirect("/survey/1");
+            } else{
+                return res.render("login", {error: "Invalid email or password"});
             }
     });
 
     // if (req.body.email == req.session.email && req.body.password == req.session.password) {
     //     return res.redirect("/survey/1");
     // }
-    res.render("login", {error: "Invalid email or password"});
+    
 });
 // ALL LOGIN ROUTE HANDLERS ABOVE
 
@@ -138,19 +154,19 @@ app.post('/signup', (req, res) =>{
             if (row) {
                 return res.render("signup", {error: "User already exists. Please log in."});
             }
+            // Insert new user into the database if the user doesn't exist
+            // DB call nested inside get since database calls are asynchronous
+            db.run('INSERT INTO users (email, password) VALUES (?, ?)', 
+                [req.body.email, req.body.password], 
+                (err) => {
+                    if (err) {
+                        console.error('❌ Error inserting into the database:', err.message);
+                        return res.render("signup", {error: "An error occurred. Please try again."});
+                    }
+                    console.log(`✅ New user created with ID ${this.lastID}`);
+                    return res.redirect("/survey/1");
+            });
         });
-    // Insert new user into the database
-    db.run('INSERT INTO users (email, password) VALUES (?, ?)', 
-        [req.body.email, req.body.password], 
-        function(err) {
-            if (err) {
-                console.error('❌ Error inserting into the database:', err.message);
-                return res.render("signup", {error: "An error occurred. Please try again."});
-            }
-            console.log(`✅ New user created with ID ${this.lastID}`);
-        });
-    // In a real app, you'd validate and store these details
-    return res.redirect("/survey/1");
 });
 // ALL SIGNUP ROUTE HANDLERS ABOVE
 
@@ -200,9 +216,14 @@ app.get('/survey/:page', (req, res) =>{
 
 app.post('/survey/:page', (req, res) =>{
     // let selected = req.body.nextPage;
+    // prevent user from continuing survey if not logged in
+     if (req.session.email == null || req.session.password == null) {
+        return res.redirect('/survey/login');
+     }
     console.log("Survey Page being loaded.");
     const pageNumber = req.params.page;
     const pageList = getEjsFiles();
+
     // console.log(selected);
    if (pageNumber == "unsuccessful"){
         res.redirect('/unsuccessful.html');
