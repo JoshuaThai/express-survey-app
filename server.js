@@ -34,33 +34,13 @@ app.get('/survey', (req, res) =>{
     res.render("index");
 });
 
-app.post('/survey', (req, res) =>{ //look at request coming from your web server
-    // req will contain infromation being sent in
-    // res will contain information being sent out by server
-    // const formData = req.body; // Access form data from req.body
-    // console.log('Received form data:', formData);
-    
-    // // save data in pseudo server-side data storage.
-    // for(const key in formData){
-    //     if (key == "nextPage" || key == "submitButton"){continue}
-    //     // console.log(key,"-", formData[key]);
-    //     myData[key] = formData[key];
-    // }
-    let selected = req.body.nextPage;
-    // let indexSelected = req.body.submitButton; // if user failed survey right away
-    // if (indexSelected == "Exit"){
-    //     res.redirect("/unsuccessful.html"); // redirect user to unsuccessful page.
-    //     return
-    // }
-    // // console.log(otherSelection);
-    // console.log(selected);
-    // if (selected == "Exit"){
-    //     res.redirect("/unsuccessful.html"); // redirect user to unsuccessful page.
-    // } else{
-    //     res.render(selected, {myData});
-    // }
-    res.render(selected);
-});
+// app.post('/survey', (req, res) =>{ //look at request coming from your web server
+//     // req will contain infromation being sent in
+//     // res will contain information being sent out by server
+//     let selected = req.body.nextPage;
+//     print("Selected Page: " + selected);
+//     res.render(selected);
+// });
 
 // '/survey/' and '/survey' and '/survey/1' now point to same page.
 app.get('/survey/:page', (req, res) =>{
@@ -69,9 +49,18 @@ app.get('/survey/:page', (req, res) =>{
     const pageNumber = req.params.page;
     const pageList = getEjsFiles();
     // console.log(selected);
-//    if (params == "unsuccessful"){
-//     res.redirect('/unsuccessful.html');
-//    }
+    // Ensure pageNumber is a number and redirect if not
+    if(isNaN(pageNumber)){
+        res.redirect('/survey/1');
+    }
+
+    // Redirect to first or last page if out of bounds
+    if (pageNumber < 1) {
+         res.redirect('/survey/1');
+    }
+    if (pageNumber > pageList.length) {
+         res.redirect('/survey/6');
+    }
    res.render(pageList[pageNumber - 1], {page: pageNumber});
     // res.render('info', {myData});
 });
