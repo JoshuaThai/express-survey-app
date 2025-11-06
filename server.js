@@ -25,7 +25,7 @@ db.run(`
     password TEXT
   )
 `);
-
+// Modify the responses table to have a foreign key that connects to users table
 db.run(`
 CREATE TABLE IF NOT EXISTS responses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
