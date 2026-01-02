@@ -43,7 +43,7 @@ app.use(session({
     resave: false, // don’t save session if unmodified
     saveUninitialized: true, // save new sessions that haven’t been modified yet
     cookie: { 
-        maxAge: 1000 * 10, // session expires after 10 seconds of inactivity (In milliseconds)
+        maxAge: 1000 * 240, // session expires after 10 seconds of inactivity (In milliseconds)
         secure: false 
     } // set to true if using HTTPS
 }));
@@ -200,7 +200,7 @@ app.get('/survey/:page', (req, res) =>{
          return res.redirect('/survey/1');
     }
     if (Number(pageNumber) > pageList.length) {
-         return res.redirect('/survey/6');
+         return res.render('/survey/6');
     }
     // Redirect to login page if on page 7
     if (Number(pageNumber) == 7) {

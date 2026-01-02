@@ -5,12 +5,12 @@ function showNext(){
 
 function exit(){
     document.getElementById("nextButton").style.display = "flex";
-    let backButton = document.getElementById("back")
+    let backButton = document.getElementById("backButton")
     if (backButton){
         backButton.hidden = true;
     }
-    document.getElementById("proceedButton").formAction = "/survey/unsuccessful";
-    // console.log(document.getElementById("nextPage").value);
+    document.getElementById("submitButton").formAction = "/survey/unsuccessful";
+    console.log(document.getElementById("nextPage").value);
 }
 
 function loadData(myData){
