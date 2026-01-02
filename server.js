@@ -200,7 +200,9 @@ app.get('/survey/:page', (req, res) =>{
          return res.redirect('/survey/1');
     }
     if (Number(pageNumber) > pageList.length) {
-         return res.render('/survey/6');
+        // Show all information in database except sensitive information
+        
+         return res.render('/survey/6', );
     }
     // Redirect to login page if on page 7
     if (Number(pageNumber) == 7) {
