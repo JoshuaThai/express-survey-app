@@ -177,6 +177,30 @@ app.post('/signup', (req, res) =>{
 
 // SURVEY PAGE ROUTE HANDLERS BELOW
 
+// helper function for data analysis
+function findMostFrequent(arr) {
+  if (arr.length === 0) return null;
+
+  // Step 1: Count occurrences
+  const frequencyMap = arr.reduce((acc, val) => {
+    acc.set(val, (acc.get(val) || 0) + 1);
+    return acc;
+  }, new Map()); // Start with an empty Map as the accumulator
+
+  // Step 2: Find the entry with the highest count
+  let maxCount = 0;
+  let mostFrequentValue = null;
+
+  for (const [value, count] of frequencyMap.entries()) {
+    if (count > maxCount) {
+      maxCount = count;
+      mostFrequentValue = value;
+    }
+  }
+
+  return mostFrequentValue;
+}
+
 // '/survey/' and '/survey' and '/survey/1' now point to same page.
 app.get('/survey/:page', (req, res) =>{
     // console.log("INFO PAGE LOADING");
@@ -205,37 +229,103 @@ app.get('/survey/:page', (req, res) =>{
     }
     if (Number(pageNumber) > pageList.length) {
         // Show all information in database except sensitive information
-       // Show all responses for this user
-        db.all(
-        "SELECT * FROM responses WHERE user_email = ?",
+       // Show responses from all users
+        return db.all(
+            "SELECT question, answer FROM responses WHERE user_email = ? ORDER BY id ASC",
+            [req.session.email],
+            (err, rows) => {
+                if (err) {
+                console.error("❌ Error querying responses:", err.message);
+                return res.render(pageList[3], 
+                    { page: pageNumber, message: null, error: "DB error", responses: [] });
+                }
+
+                console.log("✅ Loaded responses:", rows);
+                let age = [];
+                let hours = [];
+                let gameDev = [];
+                rows.forEach(row => {
+                    if (row.question == "ageBegan") {
+                        if (Number(row.answer) != NaN){
+                            age.push(row.answer);
+                        }
+                    }
+                    if (row.question == "hoursPlayed") {
+                        if (Number(row.answer) != NaN){
+                            hours.push(row.answer);
+                        }
+                    }
+                    if (row.question == "gameDev") {
+                        gameDev.push(row.answer);
+                    }
+                });
+                // console.log(age);
+
+                let mostCommonAge = findMostFrequent(age);
+                console.log("Most common age:", mostCommonAge);
+
+                let mostCommonHours = findMostFrequent(hours);
+                console.log("Most common hours played:", mostCommonHours);
+
+                let mostCommonGameDev = findMostFrequent(gameDev);
+                console.log("Most common game development response:", mostCommonGameDev);
+                
+                return res.render(pageList[3], 
+                    { page: pageNumber, message: null, error: null, 
+                        mostCommonAge: mostCommonAge, 
+                        mostCommonHours: mostCommonHours, 
+                        mostCommonGameDev: mostCommonGameDev });
+            }
+            );
+    }
+
+    if (Number(pageNumber) === 4) {
+        return db.all(
+        "SELECT question, answer FROM responses WHERE user_email = ? ORDER BY id ASC",
         [req.session.email],
         (err, rows) => {
             if (err) {
             console.error("❌ Error querying responses:", err.message);
-            return res.render("signup", { error: "An error occurred. Please try again." });
+            return res.render(pageList[pageNumber - 1], 
+                { page: pageNumber, message: null, error: "DB error", responses: [] });
             }
 
-            return res.render("survey/4", {
-            responses: rows || []
-            });
+            console.log("✅ Loaded responses:", rows);
+                let age = [];
+                let hours = [];
+                let gameDev = [];
+                rows.forEach(row => {
+                    if (row.question == "ageBegan") {
+                        if (Number(row.answer) != NaN){
+                            age.push(row.answer);
+                        }
+                    }
+                    if (row.question == "hoursPlayed") {
+                        if (Number(row.answer) != NaN){
+                            hours.push(row.answer);
+                        }
+                    }
+                    if (row.question == "gameDev") {
+                        gameDev.push(row.answer);
+                    }
+                });
+                // console.log(age);
+
+                let mostCommonAge = findMostFrequent(age);
+                console.log("Most common age:", mostCommonAge);
+
+                let mostCommonHours = findMostFrequent(hours);
+                console.log("Most common hours played:", mostCommonHours);
+
+                let mostCommonGameDev = findMostFrequent(gameDev);
+                console.log("Most common game development response:", mostCommonGameDev);
+            
+            return res.render(pageList[pageNumber - 1], 
+                { page: pageNumber, message: null, error: null, mostCommonAge: mostCommonAge, 
+                    mostCommonHours: mostCommonHours, 
+                    mostCommonGameDev: mostCommonGameDev });
         }
         );
-    }
-
-    if (Number(pageNumber) === 4) {
-    return db.all(
-      "SELECT question, answer FROM responses WHERE user_email = ? ORDER BY id ASC",
-      [req.session.email],
-      (err, rows) => {
-        if (err) {
-          console.error("❌ Error querying responses:", err.message);
-          return res.render(pageList[pageNumber - 1], { page: pageNumber, message: null, error: "DB error", responses: [] });
-        }
-
-        console.log("✅ Loaded responses:", rows); // helpful debug
-        return res.render(pageList[pageNumber - 1], { page: pageNumber, message: null, error: null, responses: rows || [] });
-      }
-    );
   }
 
     // Redirect to login page if on page 7
@@ -248,7 +338,7 @@ app.get('/survey/:page', (req, res) =>{
     }
 
 
-   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null, error: null, responses: []});
+   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null, error: null, mostCommonAge: null});
     // res.render('info', {myData});
 });
 

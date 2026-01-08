@@ -18,26 +18,19 @@
             <% } %>           
             <hr>
             <h1>Overall Survey Results:</h1>
-            <% if (responses && responses.length > 0) { %>
-                <table border="1" cellpadding="10" cellspacing="0">
-                    <thead>
-                    <tr>
-                        <th>Question</th>
-                        <th>Answer</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% responses.forEach(r => { %>
-                        <tr>
-                        <td><%= r.question %></td>
-                        <td><%= r.answer %></td>
-                        </tr>
-                    <% }) %>
-                    </tbody>
-                </table>
-                <% } else { %>
-                <p>No responses found.</p>
+            <p>Here are some overall statistics from all survey respondents:</p>
+            <h2>Interesting Statistics We Found:</h2>
+            <ul>
+                <% if (mostCommonAge != null) { %>
+                    <li>Most Common Age to start gaming: <%= mostCommonAge %></li>
                 <% } %>
+                <% if (mostCommonHours != null) { %>
+                    <li>Most Common Hours Spent Gaming per week: <%= mostCommonHours %></li>
+                <% } %>
+                <% if (mostCommonGameDev != null) { %>
+                    <li>Do People Who Play Video Games get involved in Game Development?: <%= mostCommonGameDev %></li>
+                <% } %>   
+            </ul>
         </section>
     </body> 
 </html>

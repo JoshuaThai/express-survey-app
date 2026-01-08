@@ -1,0 +1,20 @@
+            <!-- <% if (responses && responses.length > 0) { %>
+                <table border="1" cellpadding="10" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Answer</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% responses.forEach(r => { %>
+                        <tr>
+                        <td><%= r.question %></td>
+                        <td><%= r.answer %></td>
+                        </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+                <% } else { %>
+                <p>No responses found.</p>
+                <% } %> -->
