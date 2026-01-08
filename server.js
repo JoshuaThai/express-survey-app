@@ -22,7 +22,8 @@ db.run(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     email TEXT UNIQUE,
-    password TEXT
+    password TEXT,
+    completed INTEGER DEFAULT 0
   )
 `);
 // Modify the responses table to have a foreign key that connects to users table
@@ -31,8 +32,7 @@ CREATE TABLE IF NOT EXISTS responses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_email TEXT,
     question TEXT,
-    answer TEXT,
-    page_number INTEGER
+    answer TEXT
 );
 `)
 
@@ -73,6 +73,10 @@ console.log(ejsFiles);
 // dummy username and password
 // const email = "admin@outlook.com";
 // const password = "password";
+
+// test username and password
+// email: joshua@outlook.com
+// password: 123
 
 // Sample route handlers
 // app.post('/survey', (req, res) =>{ //look at request coming from your web server
@@ -201,18 +205,50 @@ app.get('/survey/:page', (req, res) =>{
     }
     if (Number(pageNumber) > pageList.length) {
         // Show all information in database except sensitive information
-        
-         return res.render('/survey/6', );
+       // Show all responses for this user
+        db.all(
+        "SELECT * FROM responses WHERE user_email = ?",
+        [req.session.email],
+        (err, rows) => {
+            if (err) {
+            console.error("❌ Error querying responses:", err.message);
+            return res.render("signup", { error: "An error occurred. Please try again." });
+            }
+
+            return res.render("survey/4", {
+            responses: rows || []
+            });
+        }
+        );
     }
+
+    if (Number(pageNumber) === 4) {
+    return db.all(
+      "SELECT question, answer FROM responses WHERE user_email = ? ORDER BY id ASC",
+      [req.session.email],
+      (err, rows) => {
+        if (err) {
+          console.error("❌ Error querying responses:", err.message);
+          return res.render(pageList[pageNumber - 1], { page: pageNumber, message: null, error: "DB error", responses: [] });
+        }
+
+        console.log("✅ Loaded responses:", rows); // helpful debug
+        return res.render(pageList[pageNumber - 1], { page: pageNumber, message: null, error: null, responses: rows || [] });
+      }
+    );
+  }
+
     // Redirect to login page if on page 7
-    if (Number(pageNumber) == 7) {
+    if (Number(pageNumber) == 5) {
         return res.redirect('/survey/login');
     }
     // Redirect to signup page if on page 8
-    if (Number(pageNumber) == 8) {
+    if (Number(pageNumber) == 6) {
         return res.redirect('/survey/signup', {error: null});
     }
-   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null, error: null});
+
+
+   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null, error: null, responses: []});
     // res.render('info', {myData});
 });
 
@@ -231,7 +267,63 @@ app.post('/survey/:page', (req, res) =>{
         res.redirect('/unsuccessful.html');
         return;
    }
-   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null});
+
+   if (pageNumber == 4) {
+    const hoursPlayed = req.body.hoursPlayed;
+    const ageBegan = req.body.ageBegan;
+    const gameDev = req.body.gameDev;
+
+    const email = req.session.email;
+    console.log("EMAIL AT RESPONSES PAGE:", email);
+
+    db.serialize(() => {
+        db.run("BEGIN TRANSACTION");
+
+        const sql = "INSERT INTO responses (user_email, question, answer) VALUES (?, ?, ?)";
+        const paramsList = [
+        [email, "hoursPlayed", hoursPlayed],
+        [email, "ageBegan", ageBegan],
+        [email, "gameDev", gameDev],
+        ];
+
+        let remaining = paramsList.length;
+        let failed = false;
+
+        paramsList.forEach((params) => {
+        db.run(sql, params, (err) => {
+            if (failed) return;
+
+            if (err) {
+            failed = true;
+            console.error("❌ Error inserting:", err.message);
+            return db.run("ROLLBACK", () => {
+                return res.render("survey/3", { error: "An error occurred. Please try again.", responses: [] });
+            });
+            }
+
+            remaining -= 1;
+
+            // ✅ commit only after last insert finishes
+            if (remaining === 0) {
+            db.run("COMMIT", (err) => {
+                if (err) {
+                console.error("❌ Error committing:", err.message);
+                return db.run("ROLLBACK", () => {
+                    return res.render("survey/3", { error: "An error occurred. Please try again.", responses: [] });
+                });
+                }
+
+                console.log("✅ All data saved for:", email);
+                return res.redirect("/survey/4");
+            });
+            }
+        });
+        });
+    });
+
+    return; // prevent the bottom res.render from running
+}
+   res.render(pageList[pageNumber - 1], {page: pageNumber, message: null, responses: []});
 });
 
 
