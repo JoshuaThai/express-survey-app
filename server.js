@@ -84,6 +84,10 @@ console.log(ejsFiles);
 //     // res will contain information being sent out by server
 // });
 
+app.get("/", (req, res) => {
+  res.redirect("/login"); // or whatever your real entry page is
+});
+
 app.get('/survey', (req, res) =>{
     if (req.session.email == null || req.session.password == null) {
         return res.redirect('/survey/login');
