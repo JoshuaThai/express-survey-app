@@ -1,5 +1,6 @@
 /* Contains the general css styling for the survey page. */
 
+/* For mobile phones and small tablets */
 @media (max-width: 768px) {
     body{
     font-family: Arial, Helvetica, sans-serif;
