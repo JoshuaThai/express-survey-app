@@ -1,5 +1,7 @@
+// ensure user can navigate to next page only if they are living in US
 function showHidden(){
     // console.log("Hidden being fired!");
+    document.getElementById("submitButton").formAction = "/survey/3";
     document.getElementById("nextButton").style.display = "flex";
     document.getElementById("backButton").hidden = false;
     document.getElementById("nextPage").value = "info4";
