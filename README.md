@@ -1,7 +1,7 @@
 # Express Survey Application
 ## Access the Application:
 Proud to announce that I deploy the application using Render.<br>
-<b>Access here:<b> https://express-survey-app.onrender.com/
+<b>Access here:</b> https://express-survey-app.onrender.com/
 ## About this:
 This is an web-based application using Express.js, Node.js and SQLite to develop a working survey that asked users for their response regarding modern video games. After the completion of the survey, the users will be redirected to a page where they can see an analysis of the results received by all survey respondents. 
 ## Purpose
