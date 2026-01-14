@@ -85,7 +85,7 @@ console.log(ejsFiles);
 // });
 
 app.get("/", (req, res) => {
-  res.redirect("/login"); // or whatever your real entry page is
+  res.redirect("/login"); // redirect to login page always from homepage.
 });
 
 app.get('/survey', (req, res) =>{
