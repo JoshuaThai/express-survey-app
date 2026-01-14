@@ -43,6 +43,7 @@
                 <!-- 15 - 18 -->
                 <input type="radio" name="ageBegan" value = 15>
                 <label>15 - 18</label><br><br>
+                
                 <input type="radio" name="ageBegan" value = 19>
                 <label>19+</label><br><br>
                 <label for="gameDev">Do you develop games? <br>(E.g.) Scratch, 
@@ -51,6 +52,24 @@
                 <label> Yes</label><br><br>
                 <input type="radio" name="gameDev" value=No">
                 <label> No</label><br><br>
+
+                 <label for="roblox"> Do you play Roblox?<span style="color: red;">*</span></label><br><br>
+                <input type="radio" onclick="showRobloxBox(false)" name="roblox" value="Yes" required>
+                <label> Yes</label>
+                <br><br>
+                <input type="radio" onclick="showRobloxBox(true)" name="roblox" value="No">
+                <label> No</label><br><br>
+                <div id="robloxYes" hidden>
+                    <label for="robloxWhy">You stated that you played Roblox. 
+                        Do you like it? Why or why not?</label>
+                    <br><br>
+                    <textarea id="robloxWhy" name="robloxWhy" rows="5" cols="100" style="resize: none;"></textarea><br><br>
+                </div>
+                <div id="robloxNo" hidden>
+                    <label for="robloxNo">You stated that you <b>DO NOT</b> played Roblox. Why?</label>
+                    <br><br>
+                    <textarea id="noRoblox" name="robloxWhy" rows="5" cols="100" style="resize: none;"></textarea><br><br>
+                </div>
             <div id = "nextButton" style="display: flex;"></div>
                 <button type="submit" formaction="/survey/2" class="indexSubmit" id="back">
                         Back</button>

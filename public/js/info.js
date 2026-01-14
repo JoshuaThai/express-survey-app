@@ -2,7 +2,7 @@ function showHidden(){
     // console.log("Hidden being fired!");
     document.getElementById("nextButton").style.display = "flex";
     document.getElementById("backButton").hidden = false;
-    document.getElementById("nextPage").value = "info2";
+    document.getElementById("nextPage").value = "info4";
     document.getElementById("hidden-answers").hidden = false;
     clear(); // clear form is user is living in US.
 }

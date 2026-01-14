@@ -208,10 +208,64 @@ app.get('/survey/:page', (req, res) =>{
     const pageList = getEjsFiles();
     // check if user is logged in
     if (req.session.email == null || req.session.password == null) {
-        if(!isNaN(pageNumber) && Number(pageNumber) == 6){
-            return res.render("info5", {page: pageNumber, 
-                message: 
-                "Thank you for showing interest in our survey! Take a look at the overall results below."});
+        if(!isNaN(Number(pageNumber) || Number(pageNumber) > pageList.length)){
+            return db.all(
+        "SELECT question, answer FROM responses ORDER BY id ASC",
+        [],
+        (err, rows) => {
+            if (err) {
+            console.error("❌ Error querying responses:", err.message);
+            return res.render(pageList[3], 
+                { page: pageNumber, message: null, error: "DB error", responses: [] });
+            }
+
+            console.log("✅ Loaded responses:", rows);
+                let age = [];
+                let hours = [];
+                let gameDev = [];
+                let playRoblox = 0;
+                rows.forEach(row => {
+                    if (row.question == "ageBegan") {
+                        if (Number(row.answer) != NaN){
+                            age.push(row.answer);
+                        }
+                    }
+                    if (row.question == "hoursPlayed") {
+                        if (Number(row.answer) != NaN){
+                            hours.push(row.answer);
+                        }
+                    }
+                    if (row.question == "gameDev") {
+                        gameDev.push(row.answer);
+                    }
+                    if (row.question == "roblox") {
+                       if (row.answer == "Yes") {
+                            playRoblox++;
+                    }
+                }
+                });
+                // console.log(age);
+
+                let mostCommonAge = findMostFrequent(age);
+                if (mostCommonAge == 0){
+                    mostCommonAge = "Under 12"
+                }
+                console.log("Most common age:", mostCommonAge);
+
+                let mostCommonHours = findMostFrequent(hours);
+                console.log("Most common hours played:", mostCommonHours);
+
+                let mostCommonGameDev = findMostFrequent(gameDev);
+                console.log("Most common game development response:", mostCommonGameDev);
+                let percentagePlayingRoblox = (playRoblox / rows.length) * 100;
+            
+            return res.render(pageList[3], 
+                { page: pageNumber, message: null, error: null, 
+                    mostCommonAge: mostCommonAge, 
+                    mostCommonHours: mostCommonHours, 
+                    mostCommonGameDev: mostCommonGameDev, percentagePlayingRoblox: percentagePlayingRoblox });
+        }
+        );
         }
         return res.redirect('/survey/login');
     }
@@ -231,8 +285,8 @@ app.get('/survey/:page', (req, res) =>{
         // Show all information in database except sensitive information
        // Show responses from all users
         return db.all(
-            "SELECT question, answer FROM responses WHERE user_email = ? ORDER BY id ASC",
-            [req.session.email],
+            "SELECT question, answer FROM responses ORDER BY id ASC",
+            [],
             (err, rows) => {
                 if (err) {
                 console.error("❌ Error querying responses:", err.message);
@@ -244,6 +298,7 @@ app.get('/survey/:page', (req, res) =>{
                 let age = [];
                 let hours = [];
                 let gameDev = [];
+                let playRoblox = 0;
                 rows.forEach(row => {
                     if (row.question == "ageBegan") {
                         if (Number(row.answer) != NaN){
@@ -258,6 +313,11 @@ app.get('/survey/:page', (req, res) =>{
                     if (row.question == "gameDev") {
                         gameDev.push(row.answer);
                     }
+                    if (row.question == "roblox") {
+                       if (row.answer == "Yes") {
+                            playRoblox++;
+                    }
+                }
                 });
                 // console.log(age);
 
@@ -269,20 +329,23 @@ app.get('/survey/:page', (req, res) =>{
 
                 let mostCommonGameDev = findMostFrequent(gameDev);
                 console.log("Most common game development response:", mostCommonGameDev);
+                let percentagePlayingRoblox = (playRoblox / rows.length) * 100;
                 
                 return res.render(pageList[3], 
                     { page: pageNumber, message: null, error: null, 
                         mostCommonAge: mostCommonAge, 
                         mostCommonHours: mostCommonHours, 
-                        mostCommonGameDev: mostCommonGameDev });
+                        mostCommonGameDev: mostCommonGameDev, 
+                        percentagePlayingRoblox: percentagePlayingRoblox 
+                    });
             }
             );
     }
 
     if (Number(pageNumber) === 4) {
         return db.all(
-        "SELECT question, answer FROM responses WHERE user_email = ? ORDER BY id ASC",
-        [req.session.email],
+        "SELECT question, answer FROM responses ORDER BY id ASC",
+        [],
         (err, rows) => {
             if (err) {
             console.error("❌ Error querying responses:", err.message);
@@ -294,6 +357,7 @@ app.get('/survey/:page', (req, res) =>{
                 let age = [];
                 let hours = [];
                 let gameDev = [];
+                let playRoblox = 0;
                 rows.forEach(row => {
                     if (row.question == "ageBegan") {
                         if (Number(row.answer) != NaN){
@@ -308,6 +372,11 @@ app.get('/survey/:page', (req, res) =>{
                     if (row.question == "gameDev") {
                         gameDev.push(row.answer);
                     }
+                    if (row.question == "roblox") {
+                       if (row.answer == "Yes") {
+                            playRoblox++;
+                    }
+                }
                 });
                 // console.log(age);
 
@@ -319,11 +388,13 @@ app.get('/survey/:page', (req, res) =>{
 
                 let mostCommonGameDev = findMostFrequent(gameDev);
                 console.log("Most common game development response:", mostCommonGameDev);
+                let percentagePlayingRoblox = (playRoblox / rows.length) * 100;
             
             return res.render(pageList[pageNumber - 1], 
-                { page: pageNumber, message: null, error: null, mostCommonAge: mostCommonAge, 
+                { page: pageNumber, message: null, error: null, 
+                    mostCommonAge: mostCommonAge, 
                     mostCommonHours: mostCommonHours, 
-                    mostCommonGameDev: mostCommonGameDev });
+                    mostCommonGameDev: mostCommonGameDev, percentagePlayingRoblox: percentagePlayingRoblox });
         }
         );
   }
@@ -362,6 +433,8 @@ app.post('/survey/:page', (req, res) =>{
     const hoursPlayed = req.body.hoursPlayed;
     const ageBegan = req.body.ageBegan;
     const gameDev = req.body.gameDev;
+    const roblox = req.body.roblox;
+    const robloxWhy = req.body.robloxWhy;
 
     const email = req.session.email;
     console.log("EMAIL AT RESPONSES PAGE:", email);
@@ -374,6 +447,8 @@ app.post('/survey/:page', (req, res) =>{
         [email, "hoursPlayed", hoursPlayed],
         [email, "ageBegan", ageBegan],
         [email, "gameDev", gameDev],
+        [email, "roblox", roblox],
+        [email, "robloxWhy", robloxWhy]
         ];
 
         let remaining = paramsList.length;

@@ -19,16 +19,19 @@
             <hr>
             <h1>Overall Survey Results:</h1>
             <p>Here are some overall statistics from all survey respondents:</p>
-            <h2>Interesting Statistics We Found:</h2>
+            <h2><u>Interesting Statistics We Found:</u></h2>
             <ul>
                 <% if (mostCommonAge != null) { %>
-                    <li>Most Common Age to start gaming: <%= mostCommonAge %></li>
+                    <li><b>Most Common Age to start gaming:</b> <%= mostCommonAge %></li>
                 <% } %>
                 <% if (mostCommonHours != null) { %>
-                    <li>Most Common Hours Spent Gaming per week: <%= mostCommonHours %></li>
+                    <li><b>Most Common Hours Spent Gaming per week:</b> <%= mostCommonHours %></li>
                 <% } %>
                 <% if (mostCommonGameDev != null) { %>
-                    <li>Do People Who Play Video Games get involved in Game Development?: <%= mostCommonGameDev %></li>
+                    <li><b>Do People Who Play Video Games get involved in Game Development?:</b> <%= mostCommonGameDev %></li>
+                <% } %> 
+                <% if (percentagePlayingRoblox != null) { %>
+                    <li><b>Percentage of Survey Respondents who play Roblox:</b> <%= percentagePlayingRoblox.toFixed(2) %>%</li>
                 <% } %>   
             </ul>
         </section>
