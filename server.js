@@ -208,7 +208,7 @@ app.get('/survey/:page', (req, res) =>{
     const pageList = getEjsFiles();
     // check if user is logged in
     if (req.session.email == null || req.session.password == null) {
-        if(!isNaN(Number(pageNumber) || Number(pageNumber) > pageList.length)){
+        if(isNaN(Number(pageNumber)) || Number(pageNumber) > pageList.length || Number(pageNumber) == 4){
             return db.all(
         "SELECT question, answer FROM responses ORDER BY id ASC",
         [],
@@ -417,6 +417,10 @@ app.post('/survey/:page', (req, res) =>{
     // let selected = req.body.nextPage;
     // prevent user from continuing survey if not logged in
      if (req.session.email == null || req.session.password == null) {
+        // Enable user to view results page even if not logged in
+        if (isNaN(Number(pageNumber)) || Number(pageNumber) > pageList.length || Number(pageNumber) == 4){
+            return res.render('/survey/4');
+        }
         return res.redirect('/survey/login');
      }
     console.log("Survey Page being loaded.");
